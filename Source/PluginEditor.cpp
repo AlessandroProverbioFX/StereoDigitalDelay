@@ -58,7 +58,7 @@ void StereoDigitalDelayAudioProcessorEditor::paint(Graphics& g)
     g.drawText("FEEDBACK", borderPad*3+knobSize*2, borderPad+knobSize, knobSize, textHeight, Justification::centred);
     
     g.setFont(8.0F);
-    g.drawText("V. 1.0.1", 365, 155, 35, 15, Justification::centred);
+    g.drawText("V. 1.0.2", 365, 155, 35, 15, Justification::centred);
 }
 
 void StereoDigitalDelayAudioProcessorEditor::resized()

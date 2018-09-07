@@ -103,6 +103,9 @@ void StereoDigitalDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer,
     const int bufferLength = buffer.getNumSamples();
     const int delayBufferLength = delayBuffer.getNumSamples();
     
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear (i, 0, bufferLength);
+    
     if (totalNumInputChannels == 1)
     {
         buffer.copyFrom(1, 0, buffer.getReadPointer(0), bufferLength);
@@ -175,15 +178,6 @@ void StereoDigitalDelayAudioProcessor::feedBackDelay(int channel, const int buff
         delayBuffer.addFromWithRamp(channel, 0, wetBufferData + bufferRemaining, bufferLength-bufferRemaining, feedback, feedback);
     }
 }
-
-/*
- StereoDigitalDelayAudioProcessor::StereoDigitalDelayAudioProcessor()
- : AudioProcessor (BusesProperties()
- .withInput ("Stereo", AudioChannelSet::stereo(), true)
- .withOutput ("Stereo", AudioChannelSet::stereo(), true)
- )
- {
- } */
 
 
 

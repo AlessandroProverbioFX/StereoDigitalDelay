@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="r6TwJx" name="StereoDigitalDelay" projectType="audioplug"
               jucerVersion="5.3.2" pluginFormats="buildAU,buildStandalone,buildVST,buildVST3"
-              pluginManufacturer="APFX" version="1.0.1">
+              pluginManufacturer="APFX" version="1.0.2">
   <MAINGROUP id="NRJlVB" name="StereoDigitalDelay">
     <GROUP id="{F9E29F48-E215-C3BD-DFF0-832449229868}" name="Source">
       <FILE id="Jk3jJk" name="PluginProcessor.cpp" compile="1" resource="0"
