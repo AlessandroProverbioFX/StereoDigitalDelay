@@ -2,6 +2,13 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#define LEVEL_ID "level"
+#define LEVEL_NAME "Level"
+#define BPM_ID "bpm"
+#define BPM_NAME "Bpm"
+#define FEEDBACK_ID "feedback"
+#define FEEDBACK_NAME "Feedback"
+
 
 class StereoDigitalDelayAudioProcessor : public AudioProcessor
 {
@@ -12,9 +19,9 @@ public:
     ~StereoDigitalDelayAudioProcessor();
     
     // Effect Parameters, controlled by the user with the UI
-    float level { 0.5 };  
-    int bpm { 80 };
-    float feedback { 0.3 };
+    float level;
+    int bpm;
+    float feedback;
     
     // Start & Stop Methods
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -26,8 +33,8 @@ public:
 
     // Main Signal Processing Method  ------------------------------------------------------------  //
     
-    void processBlock(AudioBuffer<float>&, MidiBuffer&) override;
-    void fillDelayBuffer(int channel, const int bufferLength, const int delayBufferLength,
+    void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
+    void fillDelayBuffer (int channel, const int bufferLength, const int delayBufferLength,
                          const float* bufferData, const float* delayBufferData);
     void getFromDelayBuffer (AudioBuffer<float>& buffer, int channel, const int bufferLength,
                              const int delayBufferLength, const float* wetBufferData,
@@ -55,6 +62,9 @@ public:
     void changeProgramName(int index, const String& newName) override;
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
+    
+    // Store plugin settings
+    AudioProcessorValueTreeState parameters;
 
 private:
     

@@ -6,7 +6,11 @@ Make sure to have installed the VST3 SDK by Steinberg in order to compile the VS
 
 You can download the SDK from here: https://www.steinberg.net/en/company/developers.html
 
-Version 1.0.1
+### Version 1.0.3 --> Now you can save the plugin state when you close your DAW
+
+### Version 1.0.2 --> Minor improvements
+
+### Version 1.0.1 --> First version!
 
 ![Screenshot](Images/UI.png)
 ## 

@@ -6,8 +6,21 @@ StereoDigitalDelayAudioProcessor::StereoDigitalDelayAudioProcessor()
                                 : AudioProcessor (BusesProperties()
                                                   .withInput ("Stereo", AudioChannelSet::stereo(), true)
                                                   .withOutput ("Stereo", AudioChannelSet::stereo(), true)
-                                                )
+                                                ),
+                                                level(0.5),
+                                                bpm(80),
+                                                feedback(0.3),
+                                                parameters(*this, nullptr)
  {
+     NormalisableRange<float> levelRange (0.0f, 1.0f);
+     NormalisableRange<float> bpmRange (30.0f, 200.0f);
+     NormalisableRange<float> feedbackRange (0.0f, 0.8f);
+     
+     parameters.createAndAddParameter(LEVEL_ID, LEVEL_NAME, LEVEL_NAME, levelRange, 0.5, nullptr, nullptr);
+     parameters.createAndAddParameter(BPM_ID, BPM_NAME, BPM_NAME, bpmRange, 80, nullptr, nullptr);
+     parameters.createAndAddParameter(FEEDBACK_ID, FEEDBACK_NAME, FEEDBACK_NAME, feedbackRange, 0.3, nullptr, nullptr);
+     
+     parameters.state = ValueTree("savedParams");
  }
 
 
@@ -50,9 +63,26 @@ int StereoDigitalDelayAudioProcessor::getCurrentProgram() { return 0; }
 void StereoDigitalDelayAudioProcessor::setCurrentProgram (int index) { }
 const String StereoDigitalDelayAudioProcessor::getProgramName (int index) { return {}; }
 void StereoDigitalDelayAudioProcessor::changeProgramName (int index, const String& newName) { }
-void StereoDigitalDelayAudioProcessor::getStateInformation (MemoryBlock& destData) { }
-void StereoDigitalDelayAudioProcessor::setStateInformation (const void* data, int sizeInBytes) { }
 
+// Get and Set Plugin State
+void StereoDigitalDelayAudioProcessor::getStateInformation (MemoryBlock& destData)
+{
+    ScopedPointer<XmlElement> xml (parameters.state.createXml());    
+    copyXmlToBinary(*xml, destData);
+}
+
+void StereoDigitalDelayAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+{
+    ScopedPointer<XmlElement> params (getXmlFromBinary(data, sizeInBytes));
+    
+    if (params != nullptr)
+    {
+        if (params -> hasTagName(parameters.state.getType()))
+        {
+            parameters.state = ValueTree::fromXml(*params);
+        }
+    }
+}
 
 //================================= DEFAULT METHODS =============================================
 

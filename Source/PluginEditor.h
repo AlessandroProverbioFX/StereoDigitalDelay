@@ -14,6 +14,10 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+    
+    ScopedPointer <AudioProcessorValueTreeState::SliderAttachment> levelSliderAttach;
+    ScopedPointer <AudioProcessorValueTreeState::SliderAttachment> bpmSliderAttach;
+    ScopedPointer <AudioProcessorValueTreeState::SliderAttachment> feedbackSliderAttach;
 
 private:
     

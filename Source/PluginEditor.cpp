@@ -13,38 +13,41 @@ StereoDigitalDelayAudioProcessorEditor::StereoDigitalDelayAudioProcessorEditor(S
     setSize(winWidth, winHeight);
     setResizable(false, false);
     
+    levelSliderAttach = new AudioProcessorValueTreeState::SliderAttachment (processor.parameters, LEVEL_ID, levelKnob);
+    bpmSliderAttach = new AudioProcessorValueTreeState::SliderAttachment (processor.parameters, BPM_ID, timeKnob);
+    feedbackSliderAttach = new AudioProcessorValueTreeState::SliderAttachment (processor.parameters, FEEDBACK_ID, feedbackKnob);
+    
     levelKnob.setSize(knobSize, knobSize);
     levelKnob.setTopLeftPosition(borderPad, borderPad);
     levelKnob.setSliderStyle(Slider::Rotary);
     levelKnob.setRange(0, 1, 0.001);
-    levelKnob.setValue(processor.level);
     levelKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     levelKnob.addListener(this);
-    addAndMakeVisible(&levelKnob);
+    addAndMakeVisible(levelKnob);
     
     timeKnob.setSize(knobSize, knobSize);
     timeKnob.setTopLeftPosition(borderPad*2+knobSize, borderPad);
     timeKnob.setSliderStyle(Slider::Rotary);
     timeKnob.setRange(30, 200, 1);
-    timeKnob.setValue(processor.bpm);
     timeKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     timeKnob.setPopupDisplayEnabled(true, true, this);
     timeKnob.addListener(this);
-    addAndMakeVisible(&timeKnob);
+    addAndMakeVisible(timeKnob);
     
     feedbackKnob.setSize(knobSize, knobSize);
     feedbackKnob.setTopLeftPosition(borderPad*3+knobSize*2, borderPad);
     feedbackKnob.setSliderStyle(Slider::Rotary);
     feedbackKnob.setRange(0, 0.8, 0.001);
-    feedbackKnob.setValue(processor.feedback);
     feedbackKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     feedbackKnob.addListener(this);
-    addAndMakeVisible(&feedbackKnob);
-    
+    addAndMakeVisible(feedbackKnob);    
 }
 
 StereoDigitalDelayAudioProcessorEditor::~StereoDigitalDelayAudioProcessorEditor()
 {
+    levelSliderAttach.~ScopedPointer();
+    bpmSliderAttach.~ScopedPointer();
+    feedbackSliderAttach.~ScopedPointer();
 }
 
 void StereoDigitalDelayAudioProcessorEditor::paint(Graphics& g)
@@ -58,7 +61,7 @@ void StereoDigitalDelayAudioProcessorEditor::paint(Graphics& g)
     g.drawText("FEEDBACK", borderPad*3+knobSize*2, borderPad+knobSize, knobSize, textHeight, Justification::centred);
     
     g.setFont(8.0F);
-    g.drawText("V. 1.0.2", 365, 155, 35, 15, Justification::centred);
+    g.drawText("V. 1.0.3", 365, 155, 35, 15, Justification::centred);
 }
 
 void StereoDigitalDelayAudioProcessorEditor::resized()
