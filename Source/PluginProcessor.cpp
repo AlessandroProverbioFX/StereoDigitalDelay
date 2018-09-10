@@ -94,6 +94,8 @@ void StereoDigitalDelayAudioProcessor::prepareToPlay (double sampleRate, int sam
     delayBuffer.setSize(numOutputChannel, delayBufferSize);
     wetBuffer.setSize(numOutputChannel, samplesPerBlock);
     
+    delayBuffer.clear();
+    
     localSampleRate = sampleRate;
 }
 
