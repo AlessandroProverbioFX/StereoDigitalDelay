@@ -21,6 +21,7 @@ public:
     // Effect Parameters, controlled by the user with the UI
     float level;
     int bpm;
+    int bpmHost;
     float feedback;
     
     // Start & Stop Methods
@@ -74,6 +75,9 @@ private:
     int localSampleRate { 44100 };
     
     int maxDelay { 2 } ;  // 2 sec --> 30 bpm is min bpm, while max bpm is 200
+    
+    AudioPlayHead* playHead;
+    AudioPlayHead::CurrentPositionInfo currentPositionInfo;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StereoDigitalDelayAudioProcessor)
 };

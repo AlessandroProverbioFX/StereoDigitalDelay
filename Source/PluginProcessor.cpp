@@ -7,9 +7,6 @@ StereoDigitalDelayAudioProcessor::StereoDigitalDelayAudioProcessor()
                                                   .withInput ("Stereo", AudioChannelSet::stereo(), true)
                                                   .withOutput ("Stereo", AudioChannelSet::stereo(), true)
                                                 ),
-                                                level(0.5),
-                                                bpm(80),
-                                                feedback(0.3),
                                                 parameters(*this, nullptr)
  {
      NormalisableRange<float> levelRange (0.0f, 1.0f);
@@ -21,6 +18,10 @@ StereoDigitalDelayAudioProcessor::StereoDigitalDelayAudioProcessor()
      parameters.createAndAddParameter(FEEDBACK_ID, FEEDBACK_NAME, FEEDBACK_NAME, feedbackRange, 0.3, nullptr, nullptr);
      
      parameters.state = ValueTree("savedParams");
+     
+     level = *parameters.getRawParameterValue(LEVEL_ID);
+     bpm = *parameters.getRawParameterValue(BPM_ID);
+     feedback = *parameters.getRawParameterValue(FEEDBACK_ID);
  }
 
 
@@ -80,6 +81,9 @@ void StereoDigitalDelayAudioProcessor::setStateInformation (const void* data, in
         if (params -> hasTagName(parameters.state.getType()))
         {
             parameters.state = ValueTree::fromXml(*params);
+            level = *parameters.getRawParameterValue(LEVEL_ID);
+            bpm = *parameters.getRawParameterValue(BPM_ID);
+            feedback = *parameters.getRawParameterValue(FEEDBACK_ID);
         }
     }
 }
@@ -131,6 +135,10 @@ void StereoDigitalDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer,
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    playHead = this->getPlayHead();
+    playHead->getCurrentPosition (currentPositionInfo);
+    bpmHost = currentPositionInfo.bpm;
     
     const int bufferLength = buffer.getNumSamples();
     const int delayBufferLength = delayBuffer.getNumSamples();

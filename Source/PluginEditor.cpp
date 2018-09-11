@@ -1,11 +1,10 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-int knobSize = 120;
-int textHeight = 30;
-int borderPad = 10;
-int winWidth = 400;
-int winHeight = 170;
+int unit = 20;
+int knobSize = 6*unit;
+int winWidth = 20.5*unit;
+int winHeight = 10.5*unit;
 
 StereoDigitalDelayAudioProcessorEditor::StereoDigitalDelayAudioProcessorEditor(StereoDigitalDelayAudioProcessor& p)
     : AudioProcessorEditor(&p), processor(p)
@@ -18,29 +17,34 @@ StereoDigitalDelayAudioProcessorEditor::StereoDigitalDelayAudioProcessorEditor(S
     feedbackSliderAttach = new AudioProcessorValueTreeState::SliderAttachment (processor.parameters, FEEDBACK_ID, feedbackKnob);
     
     levelKnob.setSize(knobSize, knobSize);
-    levelKnob.setTopLeftPosition(borderPad, borderPad);
+    levelKnob.setTopLeftPosition(unit, 2*unit);
     levelKnob.setSliderStyle(Slider::Rotary);
     levelKnob.setRange(0, 1, 0.001);
     levelKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     levelKnob.addListener(this);
     addAndMakeVisible(levelKnob);
     
-    timeKnob.setSize(knobSize, knobSize);
-    timeKnob.setTopLeftPosition(borderPad*2+knobSize, borderPad);
+    timeKnob.setSize(knobSize + unit, knobSize + unit);
+    timeKnob.setTopLeftPosition(13*unit, unit);
     timeKnob.setSliderStyle(Slider::Rotary);
     timeKnob.setRange(30, 200, 1);
-    timeKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    timeKnob.setPopupDisplayEnabled(true, true, this);
+    timeKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxAbove, false, 3*unit, unit);
     timeKnob.addListener(this);
     addAndMakeVisible(timeKnob);
     
     feedbackKnob.setSize(knobSize, knobSize);
-    feedbackKnob.setTopLeftPosition(borderPad*3+knobSize*2, borderPad);
+    feedbackKnob.setTopLeftPosition(7*unit, 2*unit);
     feedbackKnob.setSliderStyle(Slider::Rotary);
     feedbackKnob.setRange(0, 0.8, 0.001);
     feedbackKnob.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     feedbackKnob.addListener(this);
-    addAndMakeVisible(feedbackKnob);    
+    addAndMakeVisible(feedbackKnob);
+    
+    syncButton.setSize(unit, unit);
+    syncButton.setTopLeftPosition(10.5*unit, 0.75*unit);
+    syncButton.setColour(TextButton::buttonColourId, getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
+    syncButton.addListener(this);
+    addAndMakeVisible(syncButton);
 }
 
 StereoDigitalDelayAudioProcessorEditor::~StereoDigitalDelayAudioProcessorEditor()
@@ -53,15 +57,18 @@ StereoDigitalDelayAudioProcessorEditor::~StereoDigitalDelayAudioProcessorEditor(
 void StereoDigitalDelayAudioProcessorEditor::paint(Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
-    g.setColour(getLookAndFeel().findColour(Slider::thumbColourId));
-    g.setFont(20.0F);
     
-    g.drawText("LEVEL", borderPad, borderPad+knobSize, knobSize, textHeight, Justification::centred);
-    g.drawText("BPM", borderPad*2+knobSize, borderPad+knobSize, knobSize, textHeight, Justification::centred);
-    g.drawText("FEEDBACK", borderPad*3+knobSize*2, borderPad+knobSize, knobSize, textHeight, Justification::centred);
+    g.setColour(getLookAndFeel().findColour(Slider::thumbColourId));
+    g.setFont(unit);
+    
+    g.drawText("LEVEL", unit, 8*unit, knobSize, 2*unit, Justification::centred);
+    g.drawText("FEEDBACK", 7*unit, 8*unit, knobSize, 2*unit, Justification::centred);
+    g.drawText("BPM", 13.5*unit, 8*unit, knobSize, 2*unit, Justification::centred);
+    g.drawText("TEMPO SYNC", unit, 0.25*unit, 2*knobSize, 2*unit, Justification::centred);
+    
     
     g.setFont(8.0F);
-    g.drawText("V. 1.0.4", 365, 155, 35, 15, Justification::centred);
+    g.drawText("V. 1.1.0", 375, 195, 35, 15, Justification::centred);
 }
 
 void StereoDigitalDelayAudioProcessorEditor::resized()
@@ -75,6 +82,10 @@ void StereoDigitalDelayAudioProcessorEditor::sliderValueChanged(Slider *slider)
     processor.feedback = feedbackKnob.getValue();
 }
 
+void StereoDigitalDelayAudioProcessorEditor::buttonClicked(Button *button)
+{
+    timeKnob.setValue(processor.bpmHost);
+}
 
 
 

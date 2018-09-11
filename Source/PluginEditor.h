@@ -4,7 +4,8 @@
 #include "PluginProcessor.h"
 
 
-class StereoDigitalDelayAudioProcessorEditor : public AudioProcessorEditor,  private Slider::Listener
+class StereoDigitalDelayAudioProcessorEditor : public AudioProcessorEditor,  private Slider::Listener,
+                                                                                     TextButton::Listener
 {
     
 public:
@@ -28,7 +29,10 @@ private:
     Slider feedbackKnob;
     Slider toneKnob;
     
+    TextButton syncButton;
+    
     void sliderValueChanged(Slider* slider) override;
+    void buttonClicked(Button* button) override;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StereoDigitalDelayAudioProcessorEditor)
     

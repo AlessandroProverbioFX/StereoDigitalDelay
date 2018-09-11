@@ -6,6 +6,8 @@ Make sure to have installed the VST3 SDK by Steinberg in order to compile the VS
 
 You can download the SDK from here: https://www.steinberg.net/en/company/developers.html
 
+### Version 1.1.0 --> Now you can sync the plugin to the project bpm with a click!
+
 ### Version 1.0.4 --> Fixed a bug with Logic Pro X
 
 ### Version 1.0.3 --> Now you can save the plugin state when you close your DAW
