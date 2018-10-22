@@ -19,7 +19,7 @@ StereoDigitalDelayAudioProcessor::StereoDigitalDelayAudioProcessor()
      
      parameters.state = ValueTree("savedParams");
      
-     level = *parameters.getRawParameterValue(LEVEL_ID);
+     level = logPot(*parameters.getRawParameterValue(LEVEL_ID));
      bpm = *parameters.getRawParameterValue(BPM_ID);
      feedback = *parameters.getRawParameterValue(FEEDBACK_ID);
  }
@@ -81,11 +81,19 @@ void StereoDigitalDelayAudioProcessor::setStateInformation (const void* data, in
         if (params -> hasTagName(parameters.state.getType()))
         {
             parameters.state = ValueTree::fromXml(*params);
-            level = *parameters.getRawParameterValue(LEVEL_ID);
+            level = logPot(*parameters.getRawParameterValue(LEVEL_ID));
             bpm = *parameters.getRawParameterValue(BPM_ID);
             feedback = *parameters.getRawParameterValue(FEEDBACK_ID);
         }
     }
+}
+
+float StereoDigitalDelayAudioProcessor::logPot(float input)
+{
+    double b = 16.0;
+    double a = 1/(b-1);
+    
+    return a*pow(b,input) - a;
 }
 
 //================================= DEFAULT METHODS =============================================

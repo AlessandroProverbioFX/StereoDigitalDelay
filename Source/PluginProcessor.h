@@ -32,6 +32,8 @@ public:
     bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
    #endif
 
+    float logPot(float input);
+    
     // Main Signal Processing Method  ------------------------------------------------------------  //
     
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;

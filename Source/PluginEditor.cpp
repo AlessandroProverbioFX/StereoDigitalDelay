@@ -77,7 +77,7 @@ void StereoDigitalDelayAudioProcessorEditor::resized()
 
 void StereoDigitalDelayAudioProcessorEditor::sliderValueChanged(Slider *slider)
 {
-    processor.level = levelKnob.getValue();
+    processor.level = processor.logPot(levelKnob.getValue());
     processor.bpm = timeKnob.getValue();
     processor.feedback = feedbackKnob.getValue();
 }
